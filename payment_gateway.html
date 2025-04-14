@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NvXverse Payment Gateway</title>
+    <style>
+        :root {
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --gray: #e5e7eb;
+            --blue-dark: #1e40af;
+            --blue: #2563eb;
+            --red: #dc2626;
+            --border-gray: #e2e8f0;
+            --note-bg: #f8fafc;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: var(--light-gray);
+            color: #111827;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: clamp(12px, 3vw, 16px) clamp(16px, 5vw, 24px);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .logo {
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 800;
+            color: var(--blue-dark);
+            text-decoration: none;
+        }
+        .tagline {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: 500;
+            color: #6b7280;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+        .banner {
+            width: 100vw;
+            height: clamp(200px, 37.5vw, 360px);
+            margin: clamp(8px, 2vw, 12px) 0;
+            overflow: hidden;
+            position: relative;
+            left: 0;
+        }
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .container {
+            max-width: 600px;
+            width: 90%;
+            margin: clamp(16px, 4vw, 24px) auto;
+            background: var(--white);
+            border-radius: 12px;
+            padding: clamp(20px, 5vw, 28px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        .intro-container {
+            width: 100%;
+            background: var(--note-bg);
+            border-radius: 8px;
+            padding: clamp(12px, 3vw, 16px);
+            margin-bottom: clamp(20px, 5vw, 24px);
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            font-size: clamp(0.95rem, 2.8vw, 1rem);
+            font-weight: 500;
+            color: #374151;
+            line-height: 1.5;
+        }
+        .intro-container strong {
+            color: var(--blue);
+            font-weight: 600;
+        }
+        .dropdown {
+            position: relative;
+            margin-bottom: clamp(16px, 4vw, 20px);
+        }
+        .dropdown-toggle {
+            width: 100%;
+            padding: clamp(12px, 3vw, 14px) clamp(14px, 4vw, 16px);
+            font-size: clamp(0.95rem, 2.5vw, 1rem);
+            font-weight: 500;
+            color: #111827;
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .dropdown-toggle:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .dropdown-toggle::after {
+            content: '▼';
+            color: var(--blue);
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
+        }
+        .dropdown-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            width: clamp(300px, 80vw, 400px);
+            max-height: 80vh;
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            overflow-y: auto;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .dropdown-popup.active {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .dropdown-group {
+            padding: clamp(8px, 2vw, 12px) 0;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .dropdown-group:last-child {
+            border-bottom: none;
+        }
+        .dropdown-group-label {
+            padding: clamp(8px, 2vw, 12px) clamp(14px, 3vw, 16px);
+            font-size: clamp(0.9rem, 2.5vw, 0.95rem);
+            font-weight: 600;
+            color: var(--blue-dark);
+            background: #f8fafc;
+        }
+        .dropdown-item {
+            padding: clamp(10px, 2.5vw, 12px) clamp(14px, 3vw, 16px);
+            font-size: clamp(0.95rem, 2.5vw, 1rem);
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .dropdown-item:hover {
+            background: #f1f5f9;
+        }
+        .option-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .dropdown-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .dropdown-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        .action {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(12px, 3vw, 16px);
+            align-items: center;
+        }
+        .amount-input {
+            width: 100%;
+            padding: clamp(12px, 3vw, 14px) clamp(14px, 4vw, 16px);
+            font-size: clamp(0.95rem, 2.5vw, 1rem);
+            font-weight: 500;
+            color: #111827;
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .amount-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .amount-input::placeholder {
+            color: #9ca3af;
+        }
+        .amount-input.error {
+            border-color: var(--red);
+        }
+        .note-container {
+            width: 100%;
+            background: var(--note-bg);
+            border-radius: 8px;
+            padding: clamp(12px, 3vw, 16px);
+            margin-top: clamp(12px, 3vw, 16px);
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            text-align: left;
+            font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+            color: #374151;
+            line-height: 1.5;
+        }
+        .note-container strong {
+            color: var(--blue-dark);
+            font-weight: 600;
+        }
+        .note-container p {
+            margin-bottom: 8px;
+        }
+        .note-container p:last-child {
+            margin-bottom: 0;
+        }
+        .confirm-btn {
+            padding: clamp(12px, 3vw, 14px) clamp(28px, 6vw, 36px);
+            font-size: clamp(0.95rem, 2.5vw, 1rem);
+            font-weight: 600;
+            color: var(--white);
+            background: var(--blue);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .confirm-btn:hover {
+            background: var(--blue-dark);
+            transform: scale(1.03);
+        }
+        .confirm-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+        .map-container {
+            max-width: 600px;
+            width: 90%;
+            margin: clamp(16px, 4vw, 24px) auto;
+            text-align: center;
+        }
+        .map-container iframe {
+            width: clamp(300px, 90vw, 600px);
+            height: clamp(200px, 50vw, 300px);
+            border-radius: 12px;
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .map-container {
+            position: relative;
+        }
+        .map-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 50%);
+            pointer-events: none;
+            border-radius: 12px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: var(--white);
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 28px);
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            width: clamp(300px, 80vw, 400px);
+            opacity: 0;
+            z-index: 1000;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .modal.active {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .modal.closing {
+            transform: translate(-50%, -50%) scale(0.95);
+            opacity: 0;
+        }
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: clamp(8px, 2vw, 12px);
+        }
+        .modal-content p {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: clamp(0.9rem, 2.5vw, 0.95rem);
+            color: #111827;
+            border-bottom: 1px solid var(--border-gray);
+        }
+        .modal-content p strong {
+            font-weight: 600;
+            color: var(--blue-dark);
+        }
+        .account-row {
+            width: 100%;
+            padding: clamp(10px, 2vw, 12px);
+            margin: clamp(8px, 2vw, 10px) 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        .account-number {
+            display: inline-block;
+            font-size: clamp(1rem, 2.8vw, 1.1rem);
+            font-weight: 600;
+            color: var(--blue);
+            word-break: break-all;
+            width: 100%;
+        }
+        .modal-actions {
+            display: flex;
+            gap: clamp(8px, 2vw, 12px);
+            justify-content: center;
+            margin-top: clamp(8px, 2vw, 12px);
+            flex-wrap: wrap;
+        }
+        .copy-btn, .copy-memo-btn, .back-btn {
+            width: clamp(100px, 30vw, 140px);
+            padding: clamp(10px, 2vw, 12px);
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            font-family: 'Manrope', sans-serif;
+        }
+        .copy-btn, .copy-memo-btn {
+            color: var(--blue);
+            background: var(--white);
+            border: 1px solid var(--blue);
+        }
+        .copy-btn:hover, .copy-memo-btn:hover {
+            background: var(--blue);
+            color: var(--white);
+            transform: scale(1.03);
+        }
+        .back-btn {
+            color: #111827;
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+        }
+        .back-btn:hover {
+            background: var(--blue-dark);
+            color: var(--white);
+            transform: scale(1.03);
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        .copy-notif {
+            position: fixed;
+            top: clamp(12px, 3vw, 16px);
+            right: clamp(12px, 3vw, 16px);
+            background: var(--white);
+            color: var(--blue);
+            padding: clamp(8px, 2vw, 10px) clamp(14px, 3vw, 16px);
+            border-radius: 8px;
+            border: 1px solid var(--border-gray);
+            font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1001;
+        }
+        .copy-notif.show {
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInOut 1.5s ease forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+        .audio-player {
+            display: none;
+        }
+        footer {
+            background: var(--white);
+            padding: clamp(16px, 4vw, 24px);
+            text-align: center;
+            margin-top: auto;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: clamp(12px, 3vw, 16px);
+            margin-bottom: clamp(8px, 2vw, 12px);
+        }
+        .social-icons a {
+            transition: transform 0.2s ease;
+        }
+        .social-icons a:hover {
+            transform: scale(1.1);
+        }
+        .social-icons img {
+            width: clamp(24px, 6vw, 28px);
+            height: clamp(24px, 6vw, 28px);
+        }
+        footer p {
+            font-size: clamp(0.85rem, 2.5vw, 0.9rem);
+            color: #6b7280;
+        }
+        @media (max-width: 600px) {
+            .container, .map-container {
+                width: 95%;
+            }
+            .intro-container {
+                line-height: 1.4;
+            }
+            .banner {
+                height: 200px;
+            }
+            .modal, .dropdown-popup {
+                width: clamp(280px, 90vw, 360px);
+            }
+        }
+        @media (max-width: 400px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+            .tagline {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- SoundCloud Background Audio -->
+    <div class="audio-player">
+        <iframe
+            width="100%"
+            height="0"
+            scrolling="no"
+            frameborder="no"
+            allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1859804787&color=%232563eb&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false&volume=20&loop=true">
+        </iframe>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">NvXverse Payment Gateway</a>
+            <div class="tagline">The most important project is my life!</div>
+        </div>
+    </header>
+    <div class="banner">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEi0auoIbTwmMem-ssoH8J4aWBkXN43CUrsAFGv2lc88_1qa3O2BbYrdrNOa2JNxxvOaHXpuGElzfZIMvg3FZ6aNzv744RFy7thLreFInt_wdD3mFPK2OwiM30HByiFN_pc7Rc6RwXlWYh5G5XF4qaGy3OPLAH3Ui1buEiFHqsbTjhHcCqmdmt9e3O/s3000/20230312_010430.jpg" alt="Banner Pembayaran Aji Nugroho">
+    </div>
+    <div class="container">
+        <div class="intro-container">
+            Bayar mudah dengan metode pilihanmu, konfirmasi via <strong>WhatsApp</strong>.
+        </div>
+        <div class="dropdown">
+            <div class="dropdown-toggle" id="dropdown-toggle">Pilih Metode Pembayaran</div>
+            <div class="dropdown-popup" id="dropdown-popup">
+                <div class="dropdown-group">
+                    <div class="dropdown-group-label">Bank</div>
+                    <div class="dropdown-item" data-value='{"bank":"BLU BCA Digital","code":"014","number":"004010398052","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> BLU BCA Digital
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Bank INA","code":"517","number":"810779512177","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Bank INA
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Bank Jago","code":"542","number":"101344667435","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Bank Jago
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Bank Saqu","code":"472","number":"10064245077","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Bank Saqu
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Superbank","code":"503","number":"000009920331","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Superbank
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Krom","code":"553","number":"770077777337","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Krom
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Raya by BRI","code":"002","number":"001001759722316","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Raya by BRI
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Seabank","code":"535","number":"901647086730","type":"bank"}'>
+                        <img src="https://img.icons8.com/color/20/bank.png" class="option-icon" alt="Bank Icon"> Seabank
+                    </div>
+                </div>
+                <div class="dropdown-group">
+                    <div class="dropdown-group-label">E-Money</div>
+                    <div class="dropdown-item" data-value='{"bank":"Gopay","code":"VA-900","number":"085761126512","type":"emoney"}'>
+                        <img src="https://img.icons8.com/color/20/wallet.png" class="option-icon" alt="E-Money Icon"> Gopay
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Shopeepay","code":"VA-901","number":"085761126512","type":"emoney"}'>
+                        <img src="https://img.icons8.com/color/20/wallet.png" class="option-icon" alt="E-Money Icon"> Shopeepay
+                    </div>
+                </div>
+                <div class="dropdown-group">
+                    <div class="dropdown-group-label">Kripto</div>
+                    <div class="dropdown-item" data-value='{"bank":"USDC","code":"BSC (BEP20)","number":"0x318db45761aaa42555aede6ce7a32d338ce2df36","type":"crypto"}'>
+                        <img src="https://img.icons8.com/color/20/bitcoin.png" class="option-icon" alt="Crypto Icon"> USDC
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"USDT","code":"BSC (BEP20)","number":"0x318db45761aaa42555aede6ce7a32d338ce2df36","type":"crypto"}'>
+                        <img src="https://img.icons8.com/color/20/bitcoin.png" class="option-icon" alt="Crypto Icon"> USDT
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Bitcoin","code":"BTC","number":"1HqcEnrJN18cKjQTesiUyQFZkSh48kRxs6","type":"crypto"}'>
+                        <img src="https://img.icons8.com/color/20/bitcoin.png" class="option-icon" alt="Crypto Icon"> Bitcoin
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"XRP","code":"XRP","number":"rJn2zAPdFA193sixJwuFixRkYDUtx3apQh","memo":"501148533","type":"crypto"}'>
+                        <img src="https://img.icons8.com/color/20/bitcoin.png" class="option-icon" alt="Crypto Icon"> XRP
+                    </div>
+                    <div class="dropdown-item" data-value='{"bank":"Solana","code":"SOL","number":"4jTrUv4kKVNcpupuxxU1H1N6QPAEq89wZyBFDBwsEnWg","type":"crypto"}'>
+                        <img src="https://img.icons8.com/color/20/bitcoin.png" class="option-icon" alt="Crypto Icon"> Solana
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="action">
+            <input type="text" id="amount-input" class="amount-input" placeholder="Masukkan Nominal">
+            <button class="confirm-btn" id="confirm-btn" disabled>Konfirmasi via WhatsApp</button>
+            <div class="note-container">
+                <p><strong>Bank & E-Money:</strong> Gunakan angka bulat, misalnya 500000.</p>
+                <p><strong>Kripto:</strong> Gunakan format desimal, misalnya 0.001.</p>
+                <p>Kirim bukti pembayaran via WhatsApp setelah konfirmasi.</p>
+            </div>
+        </div>
+    </div>
+    <div class="map-container">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3977.2926406300535!2d105.20134527706873!3d-4.5412499478515915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3f37c177963acd%3A0x4d36d2657394ce59!2sAji+Nugroho!5e0!3m2!1sen!2sid!4v1744599360968!5m2!1sen!2sid"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Lokasi Kami">
+        </iframe>
+    </div>
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.instagram.com/ajinvgroho" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/2563eb/instagram-new.png" alt="Instagram">
+            </a>
+            <a href="https://www.tiktok.com/@ajinvgroho" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/2563eb/tiktok.png" alt="TikTok">
+            </a>
+            <a href="https://www.twitter.com/@ajinvgroho" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/2563eb/twitter.png" alt="Twitter">
+            </a>
+            <a href="https://www.threads.net/@ajinvgroho" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/2563eb/threads.png" alt="Threads">
+            </a>
+            <a href="https://www.youtube.com/@ajinvgroho" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/2563eb/youtube-play.png" alt="YouTube">
+            </a>
+        </div>
+        <p>© 2025 Aji Nugroho. Hak cipta dilindungi.</p>
+    </footer>
+    <div class="modal" id="bank-modal">
+        <div class="modal-content">
+            <p><strong>Metode:</strong> <span id="modal-name"></span></p>
+            <p><strong id="code-label">Kode:</strong> <span id="modal-code"></span></p>
+            <p><strong>Pemilik:</strong> Aji Nugroho</p>
+            <p class="account-row">
+                <span class="account-number" id="modal-number"></span>
+            </p>
+            <p id="modal-memo" style="display: none;"><strong>Memo:</strong> <span id="memo-value"></span></p>
+            <div class="modal-actions">
+                <button class="copy-btn" id="copy-btn">Salin</button>
+                <button class="copy-memo-btn" id="copy-memo-btn" style="display: none;">Salin Memo</button>
+                <button class="back-btn" id="back-btn">Kembali</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+    <div class="dropdown-overlay" id="dropdown-overlay"></div>
+    <div class="copy-notif" id="copy-notif"></div>
+
+    <script>
+        let selectedBank = null;
+        let nominal = '';
+        const cryptoMethods = ['USDC', 'USDT', 'Bitcoin', 'XRP', 'Solana'];
+        const emoneyMethods = ['Gopay', 'Shopeepay'];
+        const bankMethods = ['BLU BCA Digital', 'Bank INA', 'Bank Jago', 'Bank Saqu', 'Superbank', 'Krom', 'Raya by BRI', 'Seabank'];
+
+        // Dropdown (Pop-up) functionality
+        const dropdownToggle = document.getElementById('dropdown-toggle');
+        const dropdownPopup = document.getElementById('dropdown-popup');
+        const dropdownOverlay = document.getElementById('dropdown-overlay');
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+        const amountInput = document.getElementById('amount-input');
+
+        dropdownToggle.addEventListener('click', () => {
+            dropdownPopup.classList.toggle('active');
+            dropdownOverlay.classList.toggle('active');
+        });
+
+        dropdownOverlay.addEventListener('click', () => {
+            dropdownPopup.classList.remove('active');
+            dropdownOverlay.classList.remove('active');
+        });
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const data = JSON.parse(item.getAttribute('data-value'));
+                selectedBank = data;
+                dropdownToggle.textContent = data.bank;
+                dropdownPopup.classList.remove('active');
+                dropdownOverlay.classList.remove('active');
+                openModal(data);
+                updateAmountInputPlaceholder();
+                amountInput.value = ''; // Reset input
+                nominal = '';
+                updateConfirmButton();
+            });
+        });
+
+        function updateAmountInputPlaceholder() {
+            if (cryptoMethods.includes(selectedBank?.bank)) {
+                amountInput.placeholder = 'Masukkan Nominal (contoh: 0.001)';
+            } else {
+                amountInput.placeholder = 'Masukkan Nominal (contoh: 500000)';
+            }
+        }
+
+        function copyToClipboard(text, label) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const notif = document.getElementById('copy-notif');
+                    notif.textContent = `Disalin: ${label}`;
+                    notif.classList.add('show');
+                    setTimeout(() => {
+                        notif.classList.remove('show');
+                        notif.textContent = '';
+                    }, 1500);
+                }).catch(() => {
+                    alert(`Gagal menyalin ${label}. Silakan salin secara manual.`);
+                });
+            } else {
+                alert(`Fitur clipboard tidak didukung. Silakan salin ${label} secara manual.`);
+            }
+        }
+
+        function openModal(data) {
+            const modal = document.getElementById('bank-modal');
+            const overlay = document.getElementById('modal-overlay');
+            const copyBtn = document.getElementById('copy-btn');
+            const copyMemoBtn = document.getElementById('copy-memo-btn');
+            const backBtn = document.getElementById('back-btn');
+            const codeLabel = document.getElementById('code-label');
+            const accountNumber = document.getElementById('modal-number');
+            const memoRow = document.getElementById('modal-memo');
+            const memoValue = document.getElementById('memo-value');
+
+            if (!data.bank) return;
+
+            document.getElementById('modal-name').textContent = data.bank;
+            document.getElementById('modal-code').textContent = data.code;
+            accountNumber.textContent = data.number;
+            codeLabel.textContent = cryptoMethods.includes(data.bank) ? 'Jaringan:' : 'Kode:';
+
+            // Set dynamic copy button label
+            if (data.type === 'bank') {
+                copyBtn.textContent = 'Salin Norek';
+                copyBtn.onclick = () => copyToClipboard(data.number, `${data.bank} Norek`);
+            } else if (data.type === 'emoney') {
+                copyBtn.textContent = 'Salin Nomor';
+                copyBtn.onclick = () => copyToClipboard(data.number, `${data.bank} Nomor`);
+            } else if (data.type === 'crypto') {
+                copyBtn.textContent = 'Salin Alamat';
+                copyBtn.onclick = () => copyToClipboard(data.number, `${data.bank} Alamat`);
+            }
+
+            // Handle memo for XRP
+            if (data.memo && data.bank === 'XRP') {
+                memoValue.textContent = data.memo;
+                memoRow.style.display = 'flex';
+                copyMemoBtn.style.display = 'inline-block';
+                copyBtn.textContent = 'Salin Alamat';
+                copyMemoBtn.textContent = 'Salin Memo';
+                copyMemoBtn.onclick = () => copyToClipboard(data.memo, `${data.bank} Memo`);
+            } else {
+                memoRow.style.display = 'none';
+                copyMemoBtn.style.display = 'none';
+            }
+
+            backBtn.onclick = closeModal;
+
+            // Adjust font-size for long numbers (e.g., crypto)
+            const length = data.number.length;
+            if (length > 20) {
+                accountNumber.style.fontSize = `calc(clamp(0.9rem, 2.2vw, 1rem) - ${0.015 * (length - 20)}rem)`;
+            } else {
+                accountNumber.style.fontSize = '';
+            }
+
+            modal.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('bank-modal');
+            const overlay = document.getElementById('modal-overlay');
+            modal.classList.add('closing');
+            setTimeout(() => {
+                modal.classList.remove('active', 'closing');
+                overlay.classList.remove('active');
+            }, 300);
+        }
+
+        function updateConfirmButton() {
+            const confirmBtn = document.getElementById('confirm-btn');
+            confirmBtn.disabled = !selectedBank || !nominal;
+        }
+
+        amountInput.addEventListener('input', function (e) {
+            const input = e.target;
+            let value = input.value;
+
+            if (cryptoMethods.includes(selectedBank?.bank)) {
+                // Allow decimals for crypto (e.g., 0.001)
+                if (/^\d*\.?\d*$/.test(value)) {
+                    nominal = value;
+                    input.classList.remove('error');
+                } else {
+                    input.value = nominal || '';
+                    input.classList.add('error');
+                }
+            } else {
+                // Only allow integers for non-crypto
+                if (/^\d*$/.test(value)) {
+                    nominal = value;
+                    input.classList.remove('error');
+                } else {
+                    input.value = nominal || '';
+                    input.classList.add('error');
+                }
+            }
+
+            updateConfirmButton();
+        });
+
+        document.getElementById('confirm-btn').addEventListener('click', function () {
+            if (!selectedBank || !nominal) {
+                alert('Pilih metode pembayaran dan masukkan nominal terlebih dahulu.');
+                return;
+            }
+            let message = `*Konfirmasi Pembayaran*\n\n` +
+                         `*Kepada*: Aji Nugroho\n` +
+                         `*Nominal*: ${cryptoMethods.includes(selectedBank.bank) ? nominal + ' ' + selectedBank.bank : 'Rp' + nominal}\n` +
+                         `*Metode Pembayaran*: ${selectedBank.bank}\n` +
+                         `*${cryptoMethods.includes(selectedBank.bank) ? 'Alamat' : bankMethods.includes(selectedBank.bank) ? 'Norek' : 'Nomor'}*: ${selectedBank.number}\n`;
+            if (selectedBank.memo && selectedBank.bank === 'XRP') {
+                message += `*Memo*: ${selectedBank.memo}\n`;
+            }
+            message += `*Status*: Menunggu Verifikasi\n\n` +
+                      `Saya telah melampirkan bukti pembayaran di bawah ini.\n` +
+                      `Mohon konfirmasi setelah diverifikasi.\n\n` +
+                      `Terima kasih atas kerjasamanya!`;
+            const encodedMessage = encodeURIComponent(message);
+            const waLink = `https://wa.me/6285761126512?text=${encodedMessage}`;
+            window.open(waLink, '_blank');
+        });
+    </script>
+</body>
+</html>
