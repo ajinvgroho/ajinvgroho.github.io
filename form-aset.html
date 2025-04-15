@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Aset Tanah dan Bangunan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #25D366;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #1ebe57;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Form Aset Tanah dan Bangunan</h2>
+        <form id="asetForm">
+            <div class="form-group">
+                <label for="nama_aset">Nama Aset Tanah dan Bangunan</label>
+                <input type="text" id="nama_aset" placeholder="Lengkapi Nama Aset..." required>
+            </div>
+            <div class="form-group">
+                <label for="tahun">Tahun Diperoleh</label>
+                <input type="text" id="tahun" placeholder="Lengkapi Tahun Diperoleh..." required>
+            </div>
+            <div class="form-group">
+                <label for="sertifikat">Bukti Kepemilikan/Nomor Sertifikat</label>
+                <input type="text" id="sertifikat" placeholder="Lengkapi Nomor Sertifikat..." required>
+            </div>
+            <div class="form-group">
+                <label for="pengelola">Pengelola</label>
+                <input type="text" id="pengelola" placeholder="Lengkapi Pengelola..." required>
+            </div>
+            <div class="form-group">
+                <label for="penguasaan">Penguasaan</label>
+                <input type="text" id="penguasaan" placeholder="Lengkapi Penguasaan..." required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status Kepemilikan</label>
+                <input type="text" id="status" placeholder="Lengkapi Status Kepemilikan..." required>
+            </div>
+            <div class="form-group">
+                <label for="asal_usul">Asal Usul Aset</label>
+                <textarea id="asal_usul" placeholder="Lengkapi Asal Usul Aset..." rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="catatan">Catatan</label>
+                <textarea id="catatan" placeholder="Lengkapi Catatan..." rows="5" required></textarea>
+            </div>
+            <button type="submit">Kirim ke WhatsApp</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("asetForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            // Ambil data dari form
+            const nama_aset = document.getElementById("nama_aset").value;
+            const tahun = document.getElementById("tahun").value;
+            const sertifikat = document.getElementById("sertifikat").value;
+            const pengelola = document.getElementById("pengelola").value;
+            const penguasaan = document.getElementById("penguasaan").value;
+            const status = document.getElementById("status").value;
+            const asal_usul = document.getElementById("asal_usul").value;
+            const catatan = document.getElementById("catatan").value;
+            
+            // Format pesan untuk WhatsApp
+            const nomorWA = "+6285761126512";
+            const message = `Nama Aset: ${nama_aset}%0ATahun Diperoleh: ${tahun}%0ANomor Sertifikat: ${sertifikat}%0APengelola: ${pengelola}%0APenguasaan: ${penguasaan}%0AStatus Kepemilikan: ${status}%0AAsal Usul Aset: ${asal_usul}%0ACatatan: ${catatan}%0A%0ACatatan Tambahan: Silakan lampirkan Sertifikat Kepemilikan secara terpisah.`;
+            
+            // Bikin URL WhatsApp
+            const waURL = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${message}`;
+            
+            // Redirect ke WhatsApp
+            window.open(waURL, "_blank");
+        });
+    </script>
+</body>
+</html>
