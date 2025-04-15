@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form BUMDes WhatsApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #25D366;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #1ebe57;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Form Badan Usaha Milik Desa</h2>
+        <form id="bumdesForm">
+            <div class="form-group">
+                <label for="nama">Nama Badan Usaha</label>
+                <input type="text" id="nama" placeholder="Lengkapi Nama Badan Usaha..." required>
+            </div>
+            <div class="form-group">
+                <label for="tahun">Tahun Berdiri</label>
+                <input type="text" id="tahun" placeholder="Lengkapi Tahun Berdiri..." required>
+            </div>
+            <div class="form-group">
+                <label for="akta">No Akta Pendirian</label>
+                <input type="text" id="akta" placeholder="Lengkapi No Akta Pendirian..." required>
+            </div>
+            <div class="form-group">
+                <label for="pendapatan">Jumlah Pendapatan</label>
+                <input type="text" id="pendapatan" placeholder="Lengkapi Jumlah Pendapatan..." required>
+            </div>
+            <div class="form-group">
+                <label for="kekayaan">Total Kekayaan</label>
+                <input type="text" id="kekayaan" placeholder="Lengkapi Total Kekayaan..." required>
+            </div>
+            <div class="form-group">
+                <label for="kedudukan">Kedudukan</label>
+                <input type="text" id="kedudukan" placeholder="Lengkapi Kedudukan..." required>
+            </div>
+            <div class="form-group">
+                <label for="penanggungjawab">Penanggung Jawab</label>
+                <input type="text" id="penanggungjawab" placeholder="Lengkapi Penanggung Jawab..." required>
+            </div>
+            <div class="form-group">
+                <label for="lokasi">Lokasi</label>
+                <input type="text" id="lokasi" placeholder="Lengkapi Lokasi..." required>
+            </div>
+            <div class="form-group">
+                <label for="pengurus">Pengurus</label>
+                <textarea id="pengurus" placeholder="Lengkapi Pengurus..." rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <input type="text" id="alamat" placeholder="Lengkapi Alamat..." required>
+            </div>
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi dan Potensi Ekonomi</label>
+                <textarea id="deskripsi" placeholder="Lengkapi Deskripsi dan Potensi..." rows="5" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="catatan">Catatan atau Kesimpulan</label>
+                <textarea id="catatan" placeholder="Lengkapi Catatan atau Kesimpulan..." rows="5" required></textarea>
+            </div>
+            <button type="submit">Kirim ke WhatsApp</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("bumdesForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            // Ambil data dari form
+            const nama = document.getElementById("nama").value;
+            const tahun = document.getElementById("tahun").value;
+            const akta = document.getElementById("akta").value;
+            const pendapatan = document.getElementById("pendapatan").value;
+            const kekayaan = document.getElementById("kekayaan").value;
+            const kedudukan = document.getElementById("kedudukan").value;
+            const penanggungjawab = document.getElementById("penanggungjawab").value;
+            const lokasi = document.getElementById("lokasi").value;
+            const pengurus = document.getElementById("pengurus").value;
+            const alamat = document.getElementById("alamat").value;
+            const deskripsi = document.getElementById("deskripsi").value;
+            const catatan = document.getElementById("catatan").value;
+            
+            // Format pesan untuk WhatsApp
+            const nomorWA = "+6285761126512";
+            const message = `Nama BUMDes: ${nama}%0ATahun Berdiri: ${tahun}%0ANo Akta Pendirian: ${akta}%0AJumlah Pendapatan: ${pendapatan}%0ATotal Kekayaan: ${kekayaan}%0AKedudukan: ${kedudukan}%0APenanggung Jawab: ${penanggungjawab}%0ALokasi: ${lokasi}%0APengurus: ${pengurus}%0AAlamat: ${alamat}%0ADeskripsi: ${deskripsi}%0ACatatan: ${catatan}%0A%0ACatatan Tambahan: Silakan lampirkan Akta Pendirian secara terpisah.`;
+            
+            // Bikin URL WhatsApp
+            const waURL = `https://api.whatsapp.com/send?phone=${nomorWA}&text=${message}`;
+            
+            // Redirect ke WhatsApp
+            window.open(waURL, "_blank");
+        });
+    </script>
+</body>
+</html>
