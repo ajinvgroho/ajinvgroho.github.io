@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notulensi Pelatihan Optimalisasi Unit Pengaduan Masyarakat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        header {
+            background: #2c3e50;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        .content {
+            padding: 20px;
+        }
+        .day-section {
+            margin-bottom: 30px;
+        }
+        .day-section h2 {
+            color: #e74c3c;
+            font-size: 1.5em;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 5px;
+        }
+        .pasal {
+            color: #3498db;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .pasal:hover {
+            color: #e74c3c;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            width: 90vw; /* Responsive width */
+            max-width: 600px; /* Max width for larger screens */
+            max-height: 80vh; /* Max height for content */
+            overflow-y: auto; /* Scroll for long content */
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+        .modal-content {
+            margin-bottom: 10px;
+        }
+        .modal-content h3 {
+            margin: 0 0 10px;
+            color: #2c3e50;
+        }
+        .modal-content p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .modal-button {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .modal-button.cancel {
+            background: #e74c3c;
+        }
+        .modal-button:hover {
+            opacity: 0.9;
+        }
+        .modal-close {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .share-btn {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        .share-btn:hover {
+            background: #219653;
+        }
+        footer {
+            background: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            border-radius: 0 0 10px 10px;
+            font-size: 0.9em;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .modal {
+                width: 95vw;
+                max-width: 400px;
+                padding: 15px;
+                max-height: 85vh;
+            }
+            .modal-content h3 {
+                font-size: 1.2em;
+            }
+            .modal-content p {
+                font-size: 0.9em;
+            }
+            .modal-button, .modal-close {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+            header h1 {
+                font-size: 1.5em;
+            }
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+        @media (max-width: 480px) {
+            .modal {
+                width: 90vw;
+                max-width: 300px;
+                padding: 10px;
+            }
+            .modal-content h3 {
+                font-size: 1.1em;
+            }
+            .modal-content p {
+                font-size: 0.85em;
+            }
+            .modal-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .modal-button, .modal-close {
+                padding: 5px 10px;
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pelatihan Optimalisasi Pengembangan Unit Pengaduan Masyarakat<br>Kabupaten Tulang Bawang</h1>
+        </header>
+        <div class="content">
+            <div class="day-section">
+                <h2>Hari Pertama - 16 April 2025</h2>
+                <p><strong>Pemateri:</strong> Anuri, S.H, M.H, C.Me (Kabag Hukum Setdakab Tulang Bawang)</p>
+                <p><strong>Topik:</strong> Penguatan Peranan, Tugas, dan Fungsi Perangkat Kampung/Desa</p>
+                <ul>
+                    <li><strong>Pengaturan Batas Umur Aparatur:</strong> Perangkat desa diangkat pada usia minimal 20 tahun dan maksimal 42 tahun (<span class="pasal" data-pasal="UU No. 6/2014">UU No. 6/2014 sebagaimana diubah oleh UU No. 3/2024</span>, Pasal 50). Perangkat desa diberhentikan jika telah berusia 60 tahun (Pasal 53 ayat (2) huruf a). SK pengangkatan perangkat desa diterbitkan sekali dan berlaku hingga pemberhentian, kecuali ada keadaan khusus seperti pelanggaran atau pengunduran diri (<span class="pasal" data-pasal="PP No. 43/2014">PP No. 43/2014</span>, Pasal 70). <span class="pasal" data-pasal="UU No. 3/2024">UU No. 3/2024</span> memungkinkan peraturan daerah untuk menyesuaikan prosedur pengangkatan.</li>
+                    <li><strong>Pemberhentian Aparatur:</strong> Harus diatur dalam peraturan kepala desa (perkakam). Alasan pemberhentian meliputi meninggal dunia, mengundurkan diri, usia 60 tahun, atau tidak memenuhi tugas/pelanggaran (<span class="pasal" data-pasal="UU No. 6/2014">UU No. 6/2014 sebagaimana diubah oleh UU No. 3/2024</span>, Pasal 53; <span class="pasal" data-pasal="PP No. 43/2014">PP No. 43/2014</span>, Pasal 71).</li>
+                    <li><strong>Perkakam Aparatur:</strong> Wajib mencantumkan tugas dan wewenang perangkat desa (<span class="pasal" data-pasal="UU No. 6/2014">UU No. 6/2014 sebagaimana diubah oleh UU No. 3/2024</span>, Pasal 49).</li>
+                    <li><strong>Pembuktian Pemberhentian:</strong> Pemberhentian harus didukung bukti pelanggaran tugas, seperti absensi, laporan kinerja, atau pelanggaran lain yang diatur dalam perkakam (<span class="pasal" data-pasal="PP No. 43/2014">PP No. 43/2014</span>).</li>
+                    <li><strong>Klasifikasi Sanksi:</strong> Sanksi dibagi menjadi ringan (teguran, pengurangan tunjangan), sedang (mutasi, pemberhentian sementara), dan berat (pemberhentian). Klasifikasi ini biasanya diatur dalam perkakam atau peraturan daerah.</li>
+                    <li><strong>Legalitas Formal:</strong> Penting untuk administrasi dan keuangan desa, terutama untuk badan hukum seperti BUMDes sebelum mengakses pinjaman bank (<span class="pasal" data-pasal="UU No. 6/2014">UU No. 6/2014 sebagaimana diubah oleh UU No. 3/2024</span>, Pasal 87; <span class="pasal" data-pasal="PP No. 43/2014">PP No. 43/2014</span>).</li>
+                    <li><strong>Kesimpulan:</strong> Kepala desa berhak merevisi aturan melalui perkakam, wajib membangun track kinerja perangkat desa, dan memastikan legalitas formal untuk mendukung administrasi.</li>
+                </ul>
+            </div>
+            <div class="day-section">
+                <h2>Hari Kedua</h2>
+                <p><strong>Pemateri:</strong> Kejaksaan</p>
+                <p><strong>Topik:</strong> Pencegahan dan Pemberantasan Korupsi</p>
+                <ul>
+                    <li><strong>Definisi Korupsi:</strong> Penyalahgunaan wewenang untuk keuntungan pribadi/kelompok yang merugikan keuangan negara atau perekonomian negara (<span class="pasal" data-pasal="UU No. 31/1999">UU No. 31/1999</span>, Pasal 2 dan 3; jo. <span class="pasal" data-pasal="UU No. 20/2001">UU No. 20/2001</span>).</li>
+                    <li><strong>Jenis Korupsi:</strong>
+                        <ul>
+                            <li>Tidak langsung merugikan keuangan negara: Gratifikasi, suap (<span class="pasal" data-pasal="Pasal 5, 12, 12B, 13">Pasal 5, 12, 12B, 13</span>).</li>
+                            <li>Merugikan keuangan negara: Penggelapan, penyalahgunaan anggaran, proyek, dan pungutan liar (pungli, termasuk dalam penyalahgunaan wewenang, Pasal 2 dan 3).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Kewenangan Tipikor:</strong> Kejaksaan berwenang melakukan penyelidikan, penyidikan, dan penuntutan tindak pidana korupsi (<span class="pasal" data-pasal="UU No. 16/2004">UU No. 16/2004</span>).</li>
+                    <li><strong>Penegakan Hukum:</strong> Tahapan: Penyelidikan (deteksi), penyidikan (pengumpulan bukti), penuntutan (persidangan), dan eksekusi (pelaksanaan putusan).</li>
+                    <li><strong>Pencegahan & Pemberantasan:</strong> Melalui transparansi, akuntabilitas, edukasi, penegakan hukum, dan kerja sama antar lembaga.</li>
+                    <li><strong>Kesimpulan:</strong> Korupsi merugikan masyarakat; diperlukan penegakan hukum, transparansi, dan akuntabilitas untuk mencegah dan memberantasnya.</li>
+                </ul>
+            </div>
+            <button class="share-btn" onclick="shareContent()">Bagikan</button>
+        </div>
+        <footer>
+            <p>Notulensi dari Aji Nugroho</p>
+        </footer>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-content">
+            <h3>Isi Pasal</h3>
+            <p id="pasal-isi"></p>
+            <h3>Interpretasi</h3>
+            <p id="pasal-interpretasi"></p>
+        </div>
+        <div class="modal-buttons">
+            <button class="modal-button" onclick="playSpeech()">Putar Suara</button>
+            <button class="modal-button cancel" onclick="cancelSpeech()">Batalkan Suara</button>
+        </div>
+        <button class="modal-close" onclick="closeModal()">Tutup</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        const pasalData = {
+            'UU No. 6/2014': {
+                isi: 'Undang-Undang Nomor 6 Tahun 2014 tentang Desa, sebagaimana diubah oleh UU No. 3/2024, mengatur pengelolaan desa, termasuk tugas, pengangkatan, dan pemberhentian perangkat desa (Pasal 48–53), serta legalitas formal seperti BUMDes (Pasal 87). Pasal 50 menetapkan syarat pengangkatan perangkat desa (usia 20–42 tahun), dan Pasal 53 ayat (2) menyebutkan pemberhentian saat usia 60 tahun.',
+                interpretasi: 'UU ini memberikan kerangka hukum untuk otonomi desa, termasuk pengelolaan aparatur. Pasal 50 memastikan perangkat desa adalah warga produktif, sementara Pasal 53 melindungi stabilitas jabatan hingga usia pensiun (60 tahun). Dalam konteks notulensi, UU ini relevan untuk memastikan aparatur desa bekerja sesuai tugas dan dihentikan dengan alasan yang jelas, seperti usia atau pelanggaran.'
+            },
+            'PP No. 43/2014': {
+                isi: 'Peraturan Pemerintah Nomor 43 Tahun 2014 tentang Peraturan Pelaksanaan UU No. 6/2014, mengatur teknis pengelolaan desa. Pasal 70 mengatur SK pengangkatan perangkat desa yang berlaku hingga pemberhentian, dan Pasal 71 menyebutkan alasan pemberhentian seperti pelanggaran atau pengunduran diri.',
+                interpretasi: 'PP ini memberikan panduan operasional untuk UU Desa, memastikan proses pengangkatan dan pemberhentian perangkat desa terdokumentasi dengan baik. Dalam notulensi, PP ini mendukung pentingnya bukti (misalnya, absensi) untuk pemberhentian, mendorong akuntabilitas aparatur.'
+            },
+            'UU No. 3/2024': {
+                isi: 'Undang-Undang Nomor 3 Tahun 2024 tentang Perubahan Kedua atas UU No. 6/2014, memperbarui ketentuan desa, termasuk masa jabatan kepala desa (8 tahun, maksimal 2 periode, Pasal 39), syarat pengangkatan perangkat desa (Pasal 50), dan legalitas BUMDes (Pasal 87). Pasal 53 tetap mengatur pemberhentian perangkat desa, termasuk karena usia 60 tahun.',
+                interpretasi: 'Revisi ini memperkuat otonomi dan akuntabilitas desa, dengan fleksibilitas pengelolaan aparatur melalui peraturan daerah. Dalam notulensi, UU ini relevan untuk memastikan prosedur pengangkatan dan pemberhentian perangkat desa sesuai hukum, terutama batas usia 60 tahun.'
+            },
+            'UU No. 31/1999': {
+                isi: 'Undang-Undang Nomor 31 Tahun 1999 tentang Pemberantasan Tindak Pidana Korupsi, Pasal 2 dan 3 mendefinisikan korupsi sebagai penyalahgunaan wewenang yang merugikan keuangan negara, dan Pasal 5, 12, 12B, 13 mengatur suap dan gratifikasi.',
+                interpretasi: 'UU ini adalah dasar hukum pemberantasan korupsi di Indonesia, relevan dalam notulensi untuk menyoroti pentingnya transparansi dalam pengelolaan desa. Pasal-pasal ini menekankan bahwa suap dan gratifikasi, meskipun tidak selalu merugikan keuangan negara, tetap merupakan tindak pidana.'
+            },
+            'UU No. 20/2001': {
+                isi: 'Undang-Undang Nomor 20 Tahun 2001 merupakan amandemen UU No. 31/1999, memperluas cakupan korupsi, termasuk penguatan ketentuan gratifikasi (Pasal 12B) dan sanksi untuk penyalahgunaan wewenang.',
+                interpretasi: 'Amandemen ini memperketat aturan korupsi, terutama gratifikasi, yang relevan untuk aparatur desa dalam notulensi. UU ini menegaskan bahwa menerima gratifikasi tanpa laporan dapat dianggap suap, mendorong akuntabilitas di tingkat desa.'
+            },
+            'Pasal 5, 12, 12B, 13': {
+                isi: 'Pasal 5, 12, 12B, dan 13 UU No. 31/1999 jo. UU No. 20/2001 mengatur tindak pidana suap (Pasal 5 dan 12), gratifikasi (Pasal 12B), dan penyalahgunaan wewenang oleh pejabat publik (Pasal 13). Pasal 12B mewajibkan pelaporan gratifikasi dalam waktu tertentu.',
+                interpretasi: 'Pasal-pasal ini menargetkan korupsi non-material seperti suap dan gratifikasi, yang sering terjadi di tingkat lokal. Dalam notulensi, ini mengingatkan aparatur desa untuk melaporkan gratifikasi dan menghindari penyalahgunaan wewenang, mendukung transparansi.'
+            },
+            'UU No. 16/2004': {
+                isi: 'Undang-Undang Nomor 16 Tahun 2004 tentang Kejaksaan Republik Indonesia, mengatur tugas kejaksaan dalam penyelidikan, penyidikan, dan penuntutan tindak pidana, termasuk korupsi (Pasal 30–32).',
+                interpretasi: 'UU ini memberikan wewenang kepada kejaksaan untuk menangani kasus korupsi, seperti yang dibahas di Hari Kedua notulensi. Ini menegaskan peran kejaksaan dalam memastikan aparatur desa yang korup ditindak, memperkuat penegakan hukum.'
+            }
+        };
+
+        let currentUtterance = null;
+
+        document.querySelectorAll('.pasal').forEach(pasal => {
+            pasal.addEventListener('click', () => {
+                const pasalKey = pasal.getAttribute('data-pasal');
+                const data = pasalData[pasalKey] || { isi: 'Detail pasal tidak tersedia.', interpretasi: 'Interpretasi tidak tersedia.' };
+                document.getElementById('pasal-isi').innerText = data.isi;
+                document.getElementById('pasal-interpretasi').innerText = data.interpretasi;
+                document.getElementById('modal').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+
+                // Text-to-speech
+                cancelSpeech();
+                currentUtterance = new SpeechSynthesisUtterance(data.isi);
+                currentUtterance.lang = 'id-ID';
+                currentUtterance.rate = 1;
+                window.speechSynthesis.speak(currentUtterance);
+            });
+        });
+
+        function playSpeech() {
+            const isi = document.getElementById('pasal-isi').innerText;
+            cancelSpeech();
+            currentUtterance = new SpeechSynthesisUtterance(isi);
+            currentUtterance.lang = 'id-ID';
+            currentUtterance.rate = 1;
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function cancelSpeech() {
+            if (currentUtterance) {
+                window.speechSynthesis.cancel();
+                currentUtterance = null;
+            }
+        }
+
+        function closeModal() {
+            cancelSpeech();
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function shareContent() {
+            const element = document.querySelector('.container');
+            const opt = {
+                margin: 0.5,
+                filename: 'Notulensi_Pelatihan_TulangBawang.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save().then(() => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Notulensi Pelatihan Tulang Bawang',
+                        text: 'Lihat notulensi lengkap pelatihan optimalisasi unit pengaduan masyarakat!',
+                        url: window.location.href
+                    }).catch(err => console.log('Error sharing:', err));
+                } else {
+                    alert('Fitur berbagi tidak didukung di browser ini. PDF telah diunduh.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
